@@ -1,0 +1,102 @@
+---
+title: "Scatter plot in R using Plotly"
+author: "Wei Fan"
+date: "June 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is an R tutorial to help beginners to make scatter plots using the **Plotly** Package.
+
+## Set up
+
+### 0. Install Plotly Package adn add library
+
+First, let's install the "Plotly" Package. If you have already installed the Plotly package you can skip the "install" step. Since we only want to install a package once, we can type the following commad in the R **Console**, instead of the R script.
+
+```{r eval=FALSE}
+install.packages("plotly")
+```
+
+After install the package, we can add the Plotly library. Libraries are usually added at the begging of the R scripts.
+
+```{r message=FALSE}
+library(plotly)
+```
+
+### 1. Loading dataset
+
+For this tutorial, we will be using a buiilt-in R data: _mtcars_. Let's load the data, and have a closer look to out dataset. If you want to see more lines from the dataset, you can replace the number _3_ in the **head** function with the number of lines you want to see, or you can use the **View** function. 
+
+```{r}
+# Load dataset
+data("mtcars")
+# Examine the first 3 rows of the data
+head(mtcars, 3)
+
+```
+
+If you want to see the full dataset, type:
+
+```{r eval=FALSE}
+View(mtcars)
+```
+
+We can get the information of this dataset using the code:
+
+```{r eval=FALSE}
+?mtcars
+```
+
+The **mtcars** dataset contains 32 observations and 11 features:
+1. mpg	 Miles/(US) gallon
+2. cyl	 Number of cylinders
+3. disp	 Displacement (cu.in.)
+4. hp	 Gross horsepower
+5. drat	 Rear axle ratio
+6. wt	 Weight (1000 lbs)
+7. qsec	 1/4 mile time
+8. vs	 V/S
+9. am	 Transmission (0 = automatic, 1 = manual)
+10. gear	 Number of forward gears
+11. carb	 Number of carburetors
+
+## Draw a Scatter Plot in R Using PLotly 
+
+In this example we will plot a scatter plot of miles per gallon versus displacement. Below, we set column _mpg_ as x axis and column _disp_ as y axis. We set the dots in the scatter of size _10_ and color _red_. In the **layout()**, we set plot title and names of the x axis and y axis. 
+
+```{r}
+plot_ly(data = mtcars, x = ~mpg, y = ~disp, type = "scatter", mode = "markers", marker = list(size = 10, color = "red")) %>% 
+  layout(title = "Miles per gallon versus displacement", xaxis = list(title = "Miles per gallon"), 
+         yaxis = list(title = "Displacement"))
+
+```
+
+We can also add a **colorbar** _"Miles per gallon"_ to the scatter plot and let the colors of the dots changed by the value of column _cyl_. We can set the **colorscale** of the colorbar as _'Viridis'_. 
+
+```{r}
+plot_ly(data = mtcars, x = ~mpg, y = ~disp, type = "scatter", mode = "markers", marker = list(size = 10, colorbar = list(title = "Number of cylinders"), color = ~cyl, colorscale='Viridis', reversescale =T)) %>% 
+  layout(title = "Miles per gallon versus displacement", xaxis = list(title = "Miles per gallon"), 
+         yaxis = list(title = "Displacement"))
+
+```
+
+Similarly we can let the **size** of dots depends on the weigt, the _gear_ column.
+
+```{r}
+plot_ly(data = mtcars, x = ~mpg, y = ~disp, type = "scatter", mode = "markers", marker = list(size = ~gear, colorbar = list(title = "Number of cylinders"), color = ~cyl, colorscale='Viridis', reversescale =T)) %>% 
+  layout(title = "Miles per gallon versus displacement", xaxis = list(title = "Miles per gallon"), 
+         yaxis = list(title = "Displacement"))
+
+```
+
+Then, we realizes these dots are too small, we can increase the size of the dots inscale by add "*4":
+```{r}
+plot_ly(data = mtcars, x = ~mpg, y = ~disp, type = "scatter", mode = "markers", marker = list(size = ~gear*4, colorbar = list(title = "Number of cylinders"), color = ~cyl, colorscale='Viridis', reversescale =T)) %>% 
+  layout(title = "Miles per gallon versus displacement", xaxis = list(title = "Miles per gallon"), 
+         yaxis = list(title = "Displacement"))
+
+```
